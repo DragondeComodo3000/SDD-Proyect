@@ -1,0 +1,101 @@
+# Registro de decisiones
+
+Este registro conserva qué se sabe, qué se propone y qué impide avanzar.
+«Confirmado» significa afirmado por el usuario en la conversación, no inferido
+por el agente. Las respuestas confirmadas pueden precisar el producto sin que
+eso implique aprobar la spec completa.
+
+## Decisiones confirmadas
+
+Las decisiones DEC-001 a DEC-024 fueron confirmadas por el responsable durante
+el descubrimiento. Las ADE son resoluciones delegadas que el responsable adoptó
+al aprobar la baseline el 2026-10-26; se preserva esa procedencia en el registro.
+
+| ID | Decisión | Fundamento | Impacto |
+|---|---|---|---|
+| DEC-001 | La fase actual se limita a planificación SDD. | Petición inicial: no implementar código y preparar el proyecto para una IA. | Todo el repositorio; no iniciar desarrollo. |
+| DEC-002 | Servir a compradores y curiosos mediante información técnica amplia y sin limitarse a marcas. | Descripción inicial del producto. | Visión y criterios de alcance. |
+| DEC-003 | Portada con productos más buscados, buscador superior y barra lateral con ajustes y marcas. | Respuesta sobre el recorrido inicial. | Descubrimiento y navegación. |
+| DEC-004 | La ficha incluye imagen, variantes de colores o modelos, descripción, detalles técnicos, precio estimado, lanzamiento y pros y contras. | Respuesta sobre el contenido de la ficha. | Contrato de producto y contenidos. |
+| DEC-005 | El equipo carga y actualiza manualmente; una API es una posible evolución. | Respuesta sobre mantenimiento de los datos. | Operación editorial e integraciones. |
+| DEC-006 | Audiencia general internacional y precios en USD. | Respuesta sobre mercado y moneda. | Contrato de precios; no define aún el método de estimación. |
+| DEC-007 | Ocho categorías iniciales: mouses, monitores, laptops, teclados, tarjetas madre, procesadores, tarjetas de video y consolas. | Respuesta sobre categorías del primer lanzamiento. | Taxonomía y ocho contratos de atributos. |
+| DEC-008 | El visitante podrá votar si la información de un producto le fue útil o no y expresarse en una sección de comentarios. | Respuesta sobre acciones del visitante en la primera versión. | Reglas detalladas de moderación definidas en ADE-013. |
+| DEC-009 | Habrá registro opcional; los visitantes sin cuenta podrán votar y comentar como anónimos. | Respuesta sobre participación con cuenta o sin registro. | Identidad por cookie y cuentas detalladas en ADE-011/014. |
+| DEC-010 | Los comentarios deben aprobarse antes de publicarse, tanto si proceden de una cuenta como de un anónimo. | Respuesta: «que pasen por aprobacion antes de publicarse». | Moderación previa y separación entre recepción y publicación. |
+| DEC-011 | La primera versión incluirá filtros por categoría, una o varias marcas, rango de precio estimado en USD, año de lanzamiento y atributos técnicos propios de cada categoría; órdenes por más buscados, lanzamiento reciente y precio ascendente/descendente; filtros activos, cantidad de resultados, «Limpiar filtros» y tema claro/oscuro en un menú separado. | Aprobación «si esta bien» a la propuesta de opciones para la barra lateral. | Descubrimiento, presentación de resultados y apariencia. Las reglas de filtros y tema se detallan en ADE-004/015. |
+| DEC-012 | La primera versión no incluirá comparación de productos de la misma categoría en una tabla lado a lado. | Respuesta «no» a la propuesta de comparación para la primera versión. | Exclusión del comparador; se mantienen las fichas y los filtros ya acordados. |
+| DEC-013 | Usar un campo de precio en USD cargado manualmente; fuentes y método se decidirán con el equipo al llenar los datos. Se utiliza la etiqueta «Precio aproximado», elegida por el agente entre las alternativas autorizadas. | Indicación de dejar un campo «precio en el mercado» o «precio aproximado» y diferir el criterio editorial. | CAT-RF-007; el método editorial no bloquea el diseño y no se agregan campos obligatorios de fuente o fecha del precio. |
+| DEC-014 | La primera versión se ofrecerá solo en español. | Respuesta «solo español». | Interfaz, mensajes y contenidos públicos; otros idiomas fuera del alcance inicial. |
+| DEC-015 | Al comenzar sin historial de búsquedas, el equipo elegirá manualmente los productos destacados de la portada. | Respuesta «sí» a la propuesta para el arranque sin búsquedas. | Estado inicial de la portada y operación editorial de destacados. |
+| DEC-016 | Cuando haya actividad, «más buscados» se calculará a partir de las búsquedas realizadas dentro del sitio. | Respuesta «lo primero» a la alternativa entre búsquedas internas y selección manual permanente. | Clasificación posterior de la portada y orden «Más buscados». |
+| DEC-017 | Para esa clasificación solo cuenta el producto cuya ficha abre la persona desde los resultados; los otros productos mostrados no suman. | Respuesta «sí, solo el que abre». | Evento de apertura desde búsqueda. |
+| DEC-018 | Toda apertura de una ficha desde los resultados suma, incluso si la misma persona vuelve a abrirla. | Respuesta «sí, toda visita suma». | No deduplicar aperturas repetidas para este conteo. |
+| DEC-019 | «Más buscados» contará aperturas de fichas desde resultados durante una ventana móvil de los últimos 30 días. | Respuesta «Últimos 30 días». | La actividad antigua sale del conteo al superar la ventana. |
+| DEC-020 | Cada participante tendrá un voto de utilidad por producto y podrá cambiar su respuesta después. | Respuesta «Sí, editable» a la propuesta de regla de voto. | El voto actual reemplaza al previo; identidad detallada en ADE-011/014. |
+| DEC-021 | Solo una persona del equipo designada con rol de moderación aprobará comentarios. | Respuesta «Moderador designado». | Aprobación previa restringida a un permiso explícito; roles editoriales separados según ADE-005. |
+| DEC-022 | Las ocho categorías iniciales deberán tener al menos una ficha revisada por el equipo antes del lanzamiento. | Respuesta «Sí, una ficha por categoría». | Condición mínima de lanzamiento para CAT-RF-011; no establece un máximo ni una cobertura exhaustiva del mercado. |
+| DEC-023 | No se fija una cuota de lanzamiento adicional de productos o variantes: el único mínimo de catálogo es una ficha revisada por categoría. | Respuesta «Sí, solo el mínimo confirmado» al confirmar si debía fijarse un volumen mayor. | La preparación de contenidos puede exceder el mínimo, pero no se exige una cantidad total ni se promete cobertura exhaustiva. |
+| DEC-024 | Se confirma continuar con la arquitectura ya planificada para Django: una aplicación modular con HTML renderizado por servidor; no se separará frontend y backend para el MVP bajo el alcance actual. | Respuesta: «vamos con django si todo se hizo en base a eso entonces no conviene cambiarlo ahora». | Fija la arquitectura Django del MVP. PostgreSQL, versiones concretas y herramientas siguen como defaults ADE-016 sujetos a validación antes de implementar. |
+
+## Decisiones cerradas por delegación
+
+El responsable pidió resolver las decisiones restantes usando el contexto existente
+y evitando contradicciones. Las siguientes son **decisiones del agente por
+delegación (ADE)**, no respuestas textuales previas del responsable. El responsable
+las adoptó al aprobar la baseline el 2026-10-26.
+
+| ID | Resolución | Pendientes resueltas | Motivo y límite |
+|---|---|---|---|
+| ADE-001 | El MVP no incluye favoritos, enlaces de compra, afiliación, ventas, pagos ni comparación. Se concentra en consulta, filtros y participación informativa. | PND-001 | Mantiene el catálogo neutral y el límite del MVP; comparación ya está excluida por DEC-012. |
+| ADE-002 | «Más buscados» usa aperturas válidas desde resultados internos en los últimos 30 días. Cada apertura humana suma. Se ignoran agentes identificados como rastreadores conocidos; no se usa huella digital. Si el total válido de la ventana es cero, se usan destacados manuales. Con actividad, ordenar por conteo descendente, nombre normalizado y slug estable. | PND-003 | Completa DEC-015 a DEC-019; no inventa visitas para impresiones ni cuenta navegación directa. |
+| ADE-003 | Búsqueda por marca, modelo y nombre; coincidencia parcial sin distinguir mayúsculas ni diacríticos. Con término, el orden inicial es «Relevancia» (exactas, prefijos, coincidencias internas); un orden explícito de CAT-RF-016 prevalece y usa relevancia como desempate. Consulta vacía usa «Más buscados». Máximo 100 caracteres; 24 resultados por página; parámetros GET compartibles. | PND-013 | Hace reproducible el buscador sin añadir búsqueda en texto técnico ni un motor externo. |
+| ADE-004 | Filtros de grupos distintos se combinan con AND; varias marcas dentro del grupo, con OR. Rangos de precio/año son inclusivos. Precio ausente no coincide con rango. Un rango inválido muestra error y no aplica ninguno de sus dos límites; los demás filtros válidos sí se aplican. Cambiar categoría limpia solo filtros técnicos incompatibles y lo informa. «Limpiar filtros» quita todos los filtros, pero conserva búsqueda y orden. El conteo es previo a paginar; valores ausentes van al final; los empates se ordenan por nombre normalizado y slug. | PND-004 | Concreta PROP-010/011 sin representar ausencia como cero. |
+| ADE-005 | Roles internos mínimos: Editor crea y modifica borradores y propone destacados; Revisor de catálogo verifica, publica/retira fichas y gestiona destacados; Moderador designado aprueba, rechaza o retira comentarios. Una persona puede acumular roles, pero permisos se asignan por separado. Una corrección publicada crea borrador nuevo y no reemplaza la versión pública hasta su revisión. | PND-006 | Separa publicación de moderación y hace verificable DEC-022. |
+| ADE-006 | Una ficha representa una identidad comercial de marca, modelo y categoría. Variantes agrupan opciones del mismo producto; cada variante guarda sus diferencias de color, capacidad, configuración, imagen y precio cuando apliquen. Una diferencia de generación, compatibilidad o plataforma que cambie la identidad técnica crea otra ficha. Diferencias regionales se separan cuando alteren especificaciones o compatibilidad. | PND-007 | Evita mezclar configuraciones; no presume que todo color sea producto aparte. |
+| ADE-007 | Se adopta como diccionario inicial la lista de `category-data.md`; atributos numéricos se guardan en unidades normalizadas. Filtros técnicos iniciales: mouse—conexión; monitor—diagonal, resolución, frecuencia; laptop—familia de CPU, RAM, almacenamiento; GPU—VRAM; teclado—conexión, distribución, formato; tarjeta madre—socket, formato, generación de memoria; procesador—socket, núcleos, hilos; consola—familia/generación, edición y almacenamiento. Otros campos se muestran como especificaciones, no se filtran hasta tener opciones comparables. | PND-008 | Completa el set de filtros acordado y elige mínimos de utilidad por categoría; evita activar cada atributo candidato como filtro. |
+| ADE-008 | Para datos técnicos se prefiere la fuente oficial del fabricante (ficha/manual); si falta, una fuente técnica reconocida y registrada internamente. Pros y contras deben ser juicios editoriales contextualizados y sustentados en material de revisión fiable, no afirmaciones universales. Imágenes solo se publican si su procedencia y permiso de uso están verificados. La fuente y método del precio siguen a cargo del equipo al cargarlo, según DEC-013. | PND-009 | Mejora verificabilidad sin cambiar la decisión específica sobre precios ni autorizar raspado de sitios. |
+| ADE-009 | Una ficha se considera revisada cuando identidad, campos obligatorios de categoría, descripción, imagen/alt, atributos publicados y pros/contras pasan checklist; los hechos técnicos tienen respaldo interno. Precio y fecha pueden faltar y se muestran como no disponibles, nunca inventados. Se guarda editor, revisor y fecha de publicación/corrección. Se revisan fichas activas anualmente y ante corrección verificada; no hay promesa de precio vigente. | PND-006, PND-014 | Hace comprobable “revisada” y conserva el carácter aproximado/manual del precio. La revisión anual no implica servicio automatizado. |
+| ADE-010 | Las fichas públicas muestran estados de carga, error, vacío y dato no disponible. Interfaz usable por teclado y móvil; objetivo WCAG 2.2 AA y sin desplazamiento horizontal de página a 360 CSS px. Core Web Vitals objetivo al percentil 75 por dispositivo: LCP ≤2,5 s, INP ≤200 ms y CLS ≤0,1, evaluados tras disponer de tráfico suficiente. | PND-011 | Adopta metas ya propuestas en el plan; deja disponibilidad/recuperación para la decisión de hosting. |
+| ADE-011 | Participación anónima se identifica con un token aleatorio de primera parte, cookie segura con vigencia de 12 meses, sin huella digital ni uso de IP como identificador. Registrarse no fusiona automáticamente aportes anónimos. La etiqueta pública de visitas sin cuenta es «Anónimo»; se explica que borrar la cookie o usar otra cuenta puede crear otra identidad. | PND-015 | Conserva participación sin cuenta y explicita que no verifica personas reales. |
+| ADE-012 | Voto «útil/no útil» único por identidad reconocida y producto, editable sin duplicar; no se puede retirar salvo eliminación de cuenta. Se muestran los dos conteos por separado, sin calificación global del hardware. Los votos persisten ante correcciones editoriales y no cuentan para popularidad. Límite inicial configurable: 60 votos por identidad/hora. | PND-016 | Cumple DEC-020 y mantiene la distinción entre utilidad de la ficha y popularidad. |
+| ADE-013 | Comentarios en texto plano de 1–2.000 caracteres tras recortar espacios. Nacen pendientes; solo comentarios aprobados se muestran, del más reciente al más antiguo. Moderador puede aprobar, rechazar o retirar aprobación; cada acción queda auditada. No hay hilos, adjuntos, edición del autor, reportes ni correo en MVP. Al enviar se confirma «pendiente de aprobación». Límite inicial configurable: 5 envíos por identidad por hora. | PND-017 | Cierra ciclo mínimo compatible con DEC-010/021; deja funciones sociales adicionales fuera del MVP. |
+| ADE-014 | Registro con correo y contraseña, verificación del correo y recuperación por enlace. Correo nunca público; cuenta muestra un alias elegido. Al eliminar cuenta, se eliminan votos y comentarios pendientes; comentarios aprobados quedan anonimizados. Aportes anónimos no se reclaman ni fusionan al registrarse. | PND-018 | Mantiene registro opcional y minimiza datos expuestos. Proveedor de correo y revisión legal/privacidad permanecen gates de lanzamiento. |
+| ADE-015 | Tema inicial sigue el sistema operativo; una elección manual claro/oscuro prevalece y se guarda solo en ese navegador. | PND-019 | Completa PROP-012 sin exigir cuenta. |
+| ADE-016 | Stack base para planificación: Python 3.13 + Django 6.1, PostgreSQL 18, HTML renderizado por servidor, CSS y JavaScript mínimo; almacenamiento de imágenes compatible con objetos. Versiones se revalidan antes de implementar. Hosting, presupuesto y proveedor de correo no se eligen hasta conocer presupuesto y requisitos operativos. | PND-012 (parcial) | Confirma como default técnico la propuesta del plan; no inventa presupuesto ni proveedor. |
+| ADE-017 | Para el stack Django: árbol modular documentado; código e identificadores en inglés y documentación/interfaz en español; `uv` + `pyproject.toml` + `uv.lock`; runner `django.test.TestCase`; Ruff para formato/lint; Docker Compose con PostgreSQL 18 en local y CI. Git: `main` protegida, sin push directo, ramas `feat/<id>-<slug>`, `fix/<id>-<slug>`, `docs/<slug>`, `chore/<slug>`, Conventional Commits en inglés y PR/MR con una aprobación independiente y CI verde. Flujo agnóstico al proveedor; versiones de herramientas se fijan y revisan al implementar. | PND-022 | Adapta GEN-01/07/10 y TL-03/07/09 de la constitución de referencia al stack elegido; evita copiar Node/Nest/React o reglas del taller. |
+| ADE-018 | Para publicar una ficha se requieren campos comunes de identidad, descripción en español, imagen con alt/permisos, al menos un pro y un contra, fuentes internas y los atributos técnicos mínimos definidos por categoría en `category-data.md`. Precio y fecha de lanzamiento pueden faltar; los datos obligatorios desconocidos bloquean publicación. | CAT-CA-026 | Hace comprobable «ficha revisada» y permite cumplir el mínimo de una ficha por categoría sin publicar registros técnicamente incompletos. |
+| ADE-019 | La ventana de popularidad es exacta: aperturas con `opened_at` UTC en `(ahora - 30 días, ahora]`. Guardar un evento por apertura válida desde resultados; no almacenar identidad, IP ni user-agent. Eliminar eventos anteriores al límite; filtrar rastreadores en la solicitud antes de guardar. | DEC-017 a DEC-019 | Hace coincidir la ventana móvil con su precisión y mantiene la estadística sin identificador de visitante. |
+
+## Pendientes no bloqueantes para continuar la planificación
+
+| ID | Decisión diferida | Cuándo es necesaria | Por qué no se inventa ahora |
+|---|---|---|---|
+| PND-012 | Proveedor de hosting/medios/correo, presupuesto, tamaño real del equipo, disponibilidad y recuperación | Antes de estimar costos y preparar despliegue | Depende de presupuesto, región de servicio y responsables que no constan en el encargo. La arquitectura sigue portable. |
+| PND-020 | Mercados/jurisdicciones de operación y revisión legal de privacidad, cookies, términos e imágenes | Antes de habilitar registro y publicación pública | La audiencia internacional no identifica por sí sola jurisdicciones ni reemplaza revisión legal. Usar minimización de datos en el diseño. |
+| PND-021 | Nombre comercial, dominio y recursos de marca | Antes de publicar el sitio | No afecta comportamiento, arquitectura ni pruebas funcionales; usar nombre interno «Catálogo» mientras tanto. |
+
+Las decisiones delegadas permiten completar la spec y el diseño sin una nueva
+ronda de preguntas. PND-012, PND-020 y PND-021 no bloquean la planificación ni
+el desarrollo local, pero sí las operaciones de despliegue, participación pública
+y publicación que dependan de ellos. ADE-017 quedó aprobada con la baseline; la
+selección del proveedor CI sigue diferida hasta conocer la plataforma de hosting Git.
+
+### IDs pendientes resueltos por decisiones previas
+
+| ID | Resolución | Fuente |
+|---|---|---|
+| PND-002 | El campo «Precio aproximado» en USD es manual; método y fuente se deciden al cargar cada dato. | DEC-013 |
+| PND-005 | La primera versión se ofrece en español. | DEC-014 |
+| PND-010 | El mínimo de lanzamiento es una ficha revisada por categoría, sin total adicional ni promesa de exhaustividad. | DEC-022 y DEC-023 |
+| PND-022 | Convenciones de estructura, herramientas Python, comandos de CI y flujo Git definidos en ADE-017 y aprobados en la baseline. | ADE-017 |
+
+## Cómo cerrar una decisión
+
+Registrar resolución, fundamento, autor de la decisión y documentos afectados.
+Si el agente elige un detalle por delegación, identificarlo como decisión del
+agente y explicar el criterio. No atribuir al usuario una aceptación inexistente.
+
+No todas las decisiones necesitan una pregunta separada: el agente puede preparar
+una propuesta coherente para revisar en conjunto. Las decisiones del producto
+que alteran lo que se construye deben ser visibles para su responsable.
