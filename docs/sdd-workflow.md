@@ -25,8 +25,8 @@ En este proyecto deben existir contratos para identidad y variantes, atributos
 por categoría, precios, fuentes, publicación, búsqueda y popularidad. Cada
 contrato tendrá ejemplos válidos e inválidos claramente ficticios.
 
-Salida: spec revisable y plan de validación. En este proyecto, la spec 0.20 y el
-plan 0.3 están aprobados; cualquier decisión futura que cambie comportamiento
+Salida: spec revisable y plan de validación. En este proyecto, la spec 0.21 y el
+plan 0.4 están aprobados; cualquier decisión futura que cambie comportamiento
 requiere control de cambios de baseline.
 
 ## 3. Revisión de calidad de la spec

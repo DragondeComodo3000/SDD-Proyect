@@ -1,7 +1,7 @@
 # Escenarios de aceptación CAT
 
-Versión: 1.1. Estado: escenarios de diseño aprobados junto con la baseline el
-2026-10-26. No hay pruebas implementadas ni ejecutadas. `spec.md` es la fuente del
+Versión: 1.2. Estado: escenarios de diseño de la baseline correctiva aprobada.
+No hay pruebas implementadas ni ejecutadas. `spec.md` es la fuente del
 comportamiento esperado; estos escenarios describen cómo verificarlo.
 
 ## CAT-CP-001 — Recepción pendiente de revisión
@@ -58,8 +58,8 @@ comportamiento esperado; estos escenarios describen cómo verificarlo.
 - Precondición: consulta del catálogo con resultados.
 - Acción: inspeccionar el control de orden situado encima de los resultados.
 - Resultado esperado: ofrece más buscados, lanzamiento más reciente y precio
-  ascendente y descendente. La corrección del orden efectivo requiere escenarios
-  adicionales para cubrir popularidad, empates y valores ausentes.
+  ascendente y descendente. La precedencia y desempates se comprueban en
+  CAT-CP-018/022/028.
 - Resultado observado: no ejecutado.
 
 ## CAT-CP-007 — Limpiar filtros
@@ -173,15 +173,15 @@ comportamiento esperado; estos escenarios describen cómo verificarlo.
 
 ## Cobertura de criterios
 
-La revisión documental confirmó que los 41 criterios CAT-CA-001 a CAT-CA-041
-aparecen en al menos uno de los 40 escenarios CAT-CP-001 a CAT-CP-040. Los
+La revisión documental confirmó que los 47 criterios CAT-CA-001 a CAT-CA-047
+aparecen en al menos uno de los 46 escenarios CAT-CP-001 a CAT-CP-046. Los
 escenarios son diseños de verificación, no pruebas implementadas ni ejecutadas.
 La implementación deberá añadir casos cuando revele condiciones de concurrencia
 o fallos técnicos que afecten los contratos aprobados.
 
 ## Escenarios de contrato concretados por delegación
 
-Estos casos corresponden a CAT-CA-018 a CAT-CA-041. Son escenarios diseñados para
+Estos casos corresponden a CAT-CA-018 a CAT-CA-047. Son escenarios diseñados para
 futura verificación; no son pruebas implementadas ni ejecutadas.
 
 ### CAT-CP-018 — Popularidad y fallback
@@ -236,8 +236,9 @@ futura verificación; no son pruebas implementadas ni ejecutadas.
   resultados distribuidos en varias páginas.
 - Acción: cambiar a mouses; luego limpiar filtros; probar orden de precio/fecha.
 - Resultado esperado: se limpia solo el filtro técnico incompatible y se informa;
-  «Limpiar filtros» preserva query y sort; el total previo a paginar es correcto;
-  valores ausentes al final, empates por nombre normalizado y slug.
+  «Limpiar filtros» preserva query y sort; el total de productos previo a paginar
+  es correcto; el criterio de orden es primario y, con query, relevancia precede
+  al nombre normalizado y slug para desempatar. Ausencias al final.
 - Resultado observado: no ejecutado.
 
 ### CAT-CP-023 — Selección de variantes
@@ -246,8 +247,9 @@ futura verificación; no son pruebas implementadas ni ejecutadas.
 - Precondición: ficha ficticia con variantes de color y capacidad técnica distinta.
 - Acción: seleccionar cada variante.
 - Resultado esperado: se muestran únicamente imagen, precio y atributos propios;
-  no hay herencia incompatible; un cambio de generación/plataforma se representa
-  mediante otra ficha.
+  no hay herencia incompatible; toda revisión publicada tiene exactamente una
+  variante predeterminada; un cambio de generación/plataforma se representa con
+  otra ficha.
 - Resultado observado: no ejecutado.
 
 ### CAT-CP-024 — Estados y unidades de atributos
@@ -294,7 +296,8 @@ futura verificación; no son pruebas implementadas ni ejecutadas.
 - Acción: publicar y consultar fichas, filtrar y ordenar por precio.
 - Resultado esperado: precio de la revisión pública se muestra «Precio aproximado»
   en USD y formato español; no se presenta historial ni garantía de vigencia;
-  ausente se indica no disponible y ordena al final; inválidos se rechazan.
+  ausente se indica no disponible, se excluye de filtros y queda al final en ambos
+  órdenes por precio; inválidos se rechazan.
 - Resultado observado: no ejecutado.
 
 ### CAT-CP-028 — Precisión de fecha de lanzamiento
@@ -303,7 +306,8 @@ futura verificación; no son pruebas implementadas ni ejecutadas.
 - Precondición: fichas con fecha de solo año, año/mes, fecha completa y fecha ausente.
 - Acción: consultar, filtrar por año y ordenar por fecha.
 - Resultado esperado: no se inventa precisión; las fechas parciales coinciden con
-  su año conocido; ausencia no coincide y se ordena al final.
+  su año conocido; en orden descendente completo, mes ausente vale 0 y día ausente
+  vale 0 solo para ordenar; ausencia total no coincide y queda al final.
 - Resultado observado: no ejecutado.
 
 ### CAT-CP-029 — Fuentes editoriales y permiso de imagen
@@ -362,10 +366,13 @@ futura verificación; no son pruebas implementadas ni ejecutadas.
 - Criterios: CAT-CA-034 y CAT-CA-035; requisito CAT-RF-014.
 - Precondición: usuario con correo no verificado, verificado, voto, comentario
   pendiente y comentario aprobado.
-- Acción: verificar correo, recuperar acceso y solicitar eliminación de cuenta.
+- Acción: verificar correo, recuperar acceso, iniciar sesión en dos navegadores y
+  solicitar eliminación de cuenta.
 - Resultado esperado: alias público y correo privado; recuperación por enlace;
-  voto y comentario pendiente eliminados; comentario aprobado conserva texto con
-  autor «Anónimo»; aportes anónimos no se vinculan.
+  tras eliminar cuenta se invalidan ambas sesiones, se borran sus votos y
+  comentarios no públicos, y el comentario aprobado se conserva sin referencias
+  de autoría como «Anónimo». La auditoría no conserva correo ni alias; los aportes
+  anónimos no se vinculan.
 - Resultado observado: no ejecutado.
 
 ### CAT-CP-035 — Tema del sistema y preferencia manual
@@ -425,4 +432,83 @@ futura verificación; no son pruebas implementadas ni ejecutadas.
 - Resultado esperado: cada estado se presenta en español y se distingue de los
   otros; un campo ausente se marca como no disponible, nunca como cero ni como
   ausencia de resultados.
+- Resultado observado: no ejecutado.
+
+### CAT-CP-041 — Filtros sobre una sola variante
+
+- Criterios: CAT-CA-042; requisitos CAT-RF-003/017.
+- Precondición: producto ficticio con variante A (8 GB, USD 500) y variante B
+  (32 GB, USD 1.200); filtros técnicos de RAM y precio.
+- Acción: filtrar por 32 GB y precio máximo USD 600; luego por 8 GB y precio
+  máximo USD 600; repetir con ambas variantes coincidentes.
+- Resultado esperado: el primer conjunto no contiene el producto; el segundo lo
+  contiene una vez; cuando ambas variantes coincidan, el producto y conteo siguen
+  apareciendo una sola vez.
+- Resultado observado: no ejecutado.
+
+### CAT-CP-042 — Variante representada, predeterminada y URL
+
+- Criterios: CAT-CA-043; requisitos CAT-RF-003/007/016.
+- Precondición: producto con variante predeterminada A (8 GB, USD 600) y variante
+  B (32 GB, USD 1.200), ambas publicadas con claves estables; producto adicional
+  cuya variante predeterminada no coincide con el filtro y cuya variante coincidente
+  no tiene precio.
+- Acción: consultar resultados con y sin filtro de 32 GB; abrir el resultado,
+  visitar la URL sin selector y solicitar una clave retirada.
+- Resultado esperado: sin filtro, tarjeta representa A; con filtro de 32 GB,
+  representa B y el precio de orden es USD 1.200. La URL del resultado abre B;
+  la URL sin selector abre A; la clave retirada muestra «Variante no disponible»
+  y no cambia de variante silenciosamente. En el producto adicional, la tarjeta
+  representa la variante sin precio que sí coincide y no muestra la predeterminada
+  incompatible con el filtro.
+- Resultado observado: no ejecutado.
+
+### CAT-CP-043 — Autoría exclusiva y ciclo de eliminación de cuenta
+
+- Criterios: CAT-CA-044 y CAT-CA-045; requisitos CAT-RF-012/013/014.
+- Precondición: cuentas y actores anónimos ficticios con tokens válidos.
+- Acción: intentar crear voto/comentario con solo usuario, solo actor, ambos y
+  ninguno; luego borrar la cuenta autora de un comentario aprobado, comprobar que
+  su sesión y credenciales ya no sirven e intentar registrarse de nuevo con el mismo
+  correo para votar y consultar los aportes previos.
+- Resultado esperado: los dos casos con exactamente un autor se aceptan; ambos y
+  ninguno se rechazan. Tras borrar cuenta, el aprobado permanece sin referencia a
+  usuario ni actor y se muestra como «Anónimo». La sesión anterior no autentica;
+  el nuevo registro es identidad distinta y no recupera votos ni autoría previa.
+- Resultado observado: no ejecutado.
+
+### CAT-CP-044 — Validación de esquemas de atributos
+
+- Criterios: CAT-CA-047; requisito CAT-RF-006.
+- Precondición: valores de prueba ficticios para atributos obligatorios y
+  opcionales de las ocho categorías; ejemplos válidos e inválidos por tipo.
+- Acción: guardar una resolución válida y una con dimensiones no enteras; una
+  capacidad con unidad incompatible; una conexión fuera del conjunto declarado;
+  una lista donde el campo es escalar y ausencia expresada como cero.
+- Resultado esperado: valores conformes se conservan con unidad/cardinalidad
+  definidas; los otros se rechazan asociados al atributo y no se convierten ni se
+  publican como valores válidos.
+- Resultado observado: no ejecutado.
+
+### CAT-CP-045 — Expiración de identidad anónima
+
+- Criterios: CAT-CA-046; requisitos CAT-RF-012/013.
+- Precondición: actor anónimo con voto, comentario aprobado y token con vencimiento
+  fijado a los 365 días de emisión; preparar consultas un instante antes,
+  exactamente al vencer y un instante después.
+- Acción: participar con el token expirado y consultar los aportes existentes.
+- Resultado esperado: antes del vencimiento el token autentica; exactamente al
+  vencer y después no permite escribir y su hash se elimina; el voto
+  conserva su conteo y el comentario aprobado sigue visible como «Anónimo». Un
+  token nuevo crea identidad nueva, sin apropiarse de los aportes anteriores.
+- Resultado observado: no ejecutado.
+
+### CAT-CP-046 — Orden completo de fechas parciales
+
+- Criterios: CAT-CA-028; requisito CAT-RF-008.
+- Precondición: fechas ficticias: 2026, 2026-03, 2026-03-12, 2025-12-31 y una
+  fecha ausente.
+- Acción: ordenar por lanzamiento más reciente y navegar el orden completo.
+- Resultado esperado: 2026-03-12, 2026-03, 2026, 2025-12-31 y fecha ausente, en
+  ese orden; solo se muestran las precisiones realmente cargadas.
 - Resultado observado: no ejecutado.

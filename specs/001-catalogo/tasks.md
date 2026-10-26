@@ -1,7 +1,7 @@
 # CAT — Backlog de planificación
 
 Estado: **seguimiento aprobado de la baseline**. Spec de referencia: versión
-0.20. Las tareas CAT-T son trabajo futuro planificado; ninguna está ejecutada.
+0.21. Las tareas CAT-T son trabajo futuro planificado; ninguna está ejecutada.
 
 Las tareas CAT-PLAN-001 a CAT-PLAN-010 quedan completadas como trabajo documental
 por delegación del responsable. Sus decisiones se registran como ADE; los casos de
@@ -94,7 +94,7 @@ aceptación son escenarios diseñados, no pruebas implementadas ni ejecutadas.
 ### [CAT-PLAN-011] Cerrar gates operativos antes de lanzamiento
 
 - Estado: pendiente antes de producción/publicación; no bloquea el desarrollo local.
-- Depende de: resolver PND-012, PND-020 y PND-021 según cada gate.
+- Depende de: CAT-T-035, CAT-T-036 y CAT-T-037; recoge el cierre de cada gate cuando esté completado.
 - Requisitos: CAT-RNF-003, CAT-RNF-004.
 - Decisiones: PND-012, PND-020 y PND-021.
 - Archivos/contratos: `docs/decisions.md`, plan §11 y §13.
@@ -103,13 +103,13 @@ aceptación son escenarios diseñados, no pruebas implementadas ni ejecutadas.
 
 ### [CAT-PLAN-012] Hacer revisión QA independiente del paquete SDD 0.20
 
-- Estado: completada; hallazgos bloqueantes resueltos en spec 0.20 y plan 0.3.
+- Estado: completada para la baseline inicial 0.20/0.3; la revisión correctiva posterior está registrada en CAT-PLAN-016/017.
 - Depende de: CAT-PLAN-001 a CAT-PLAN-010.
 - Requisitos: todos los CAT-RF y CAT-RNF.
-- Criterios: CAT-CA-001 a CAT-CA-041.
+- Criterios: CAT-CA-001 a CAT-CA-041 en la revisión inicial.
 - Archivos/contratos: `spec.md`, `acceptance.md`, `traceability.md`, `plan.md`, `category-data.md`, `docs/development-conventions.md`, `docs/constitution-review.md`.
 - Hecho cuando: otra lectura detecta contradicciones, ambigüedades y fallos de trazabilidad en spec, plan y convenciones; los hallazgos bloqueantes se resuelven y todos los criterios tienen escenario.
-- Evidencia: la revisión independiente identificó brechas de campos obligatorios por categoría, versionado de correcciones, precisión de la ventana de popularidad, modelo de cuenta Django y separación de gates. Resoluciones: ADE-018/ADE-019, `category-data.md`, `ProductRevision` y modelo `User`/grupos en `plan.md`; se corrigió TDEC-005. El cierre añadió criterios explícitos para ADE-009/ADE-010, estados retirados y validación de precio; CAT-CA-001 a CAT-CA-041 tienen escenarios y tareas trazables.
+- Evidencia: la revisión independiente inicial identificó brechas de campos obligatorios por categoría, versionado de correcciones, precisión de la ventana de popularidad, modelo de cuenta Django y separación de gates. Sus resoluciones se conservan como historial de la revisión 0.20/0.3; la cobertura vigente se completó en CAT-PLAN-016/017.
 
 ### [CAT-PLAN-015] Cerrar convenciones de desarrollo con la referencia externa
 
@@ -136,7 +136,25 @@ aceptación son escenarios diseñados, no pruebas implementadas ni ejecutadas.
 - Requisitos: los de la baseline aprobada.
 - Archivos/contratos: plan aprobado, criterios CAT-CA y escenarios CAT-CP.
 - Hecho cuando: cada tarea de código es pequeña, ordenada por dependencias y ligada a criterios, casos de verificación, interfaces afectadas y un resultado observable. Crear el backlog no implementa código; iniciar la implementación requerirá una instrucción explícita posterior.
-- Evidencia: `implementation-backlog.md` contiene CAT-T-001 a CAT-T-037 con dependencias, criterios, casos de verificación y resultados observables.
+- Evidencia: `implementation-backlog.md` contiene CAT-T-001 a CAT-T-038 con dependencias, criterios, casos de verificación y resultados observables.
+
+### [CAT-PLAN-016] Aplicar correcciones de la revisión SDD
+
+- Estado: completada como trabajo documental en la revisión correctiva autorizada.
+- Depende de: CAT-PLAN-012 y de la instrucción explícita del responsable de aplicar las correcciones.
+- Requisitos: criterios afectados por REV-SDD-001 a REV-SDD-009.
+- Archivos/contratos: spec, plan, diccionario de categorías, escenarios, trazabilidad, backlog, decisiones y registro de baseline.
+- Hecho cuando: cada hallazgo tiene resolución registrada, los documentos enlazados concuerdan y las verificaciones documentales no detectan IDs sin traza, contradicciones ni enlaces rotos.
+- Evidencia: `docs/sdd-review.md` y revisión correctiva de baseline.
+
+### [CAT-PLAN-017] Actualizar trazabilidad tras corrección
+
+- Estado: completada como trabajo documental.
+- Depende de: CAT-PLAN-016.
+- Requisitos: CAT-RF-001 a CAT-RF-019; CAT-RNF-001 a CAT-RNF-004.
+- Archivos/contratos: `spec.md`, `acceptance.md`, `implementation-backlog.md`, `traceability.md`.
+- Hecho cuando: todos los CAT-CA-001 a CAT-CA-047 enlazan al menos un CAT-CP y CAT-T; los 46 escenarios quedan enumerados y cualquier medición no ejecutada mantiene su estado real.
+- Evidencia: `traceability.md` versión 1.2 y verificaciones documentales registradas en `docs/sdd-review.md`.
 
 La aprobación de baseline no autoriza iniciar CAT-T. Para ejecutar cualquier
 tarea CAT-T se requiere una instrucción posterior explícita del responsable.

@@ -36,7 +36,7 @@ afiliación ni recomendaciones automáticas en la primera versión.
    en una sección de comentarios asociada al producto.
 
 Los detalles de búsqueda, filtros, popularidad y participación se concretaron
-como decisiones delegadas ADE-002 a ADE-015 y criterios CAT-CA-018 a CAT-CA-041.
+como decisiones delegadas ADE-002 a ADE-015 y criterios CAT-CA-018 a CAT-CA-047.
 La votación evalúa la utilidad de la información; no es una calificación del
 dispositivo.
 

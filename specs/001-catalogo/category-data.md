@@ -1,6 +1,6 @@
 # Diccionario inicial de datos por categoría
 
-Versión: 1.0. Estado: **contrato de datos aprobado el 2026-10-26**. Los campos
+Versión: 1.1. Estado: **contrato de datos actualizado en la revisión correctiva autorizada**. Los campos
 descritos no contienen valores de productos reales. La carga de datos requiere
 fuentes y revisión editorial según los criterios aprobados.
 
@@ -68,6 +68,67 @@ producto exponga todos los campos filtrables u opcionales de la tabla inferior.
 Los filtros numéricos reciben mínimo/máximo inclusivos y los categóricos permiten
 selección múltiple. Si un campo admite varios valores, el producto coincide si
 incluye al menos una de las opciones seleccionadas.
+
+## Esquemas de tipo, unidad y cardinalidad
+
+Los tipos de este esquema son normativos. Enteros de conteo son mayores que cero,
+salvo campos de cantidad donde cero tenga sentido físico (por ejemplo, puertos).
+Las magnitudes decimales son finitas; frecuencia, peso, distancia, capacidad y
+potencia conocidas son positivas. No se aceptan `NaN`, infinito, valores
+negativos ni conversiones implícitas de texto a número. Identificadores de modelo,
+tecnología, socket, chipset, sistema operativo, estándar y conector son texto plano
+conservado según la fuente; no se inventan opciones de un catálogo cerrado.
+
+Capacidad se normaliza a bytes: GB = 1.000.000.000; TB = 1.000.000.000.000;
+GiB = 1.073.741.824; TiB = 1.099.511.627.776. Se conserva en la ficha la unidad
+declarada por la fuente. Una resolución es el par ordenado de enteros positivos
+`(ancho_px, alto_px)`; no se representa con un único escalar. Un atributo de tipo
+conjunto conserva cero o más valores normalizados de su conjunto declarado. Los
+campos marcados como no filtrables se muestran, pero no participan en consultas.
+
+| Categoría | Atributo (clave) | Tipo, unidad y cardinalidad | Filtro |
+|---|---|---|---|
+| Mouses | Conexión (`connection`) | Conjunto de enum: cable, radio 2,4 GHz, Bluetooth | Sí; selección múltiple |
+| Mouses | Sensor (`sensor`), mano/diseño (`hand_design`) | Texto del fabricante o editor; uno | No |
+| Mouses | DPI/CPI (`sensitivity_dpi`), sondeo (`polling_hz`), peso (`weight_g`), botones (`button_count`), batería (`battery_mah`) | DPI/CPI: decimal dpi; sondeo: entero Hz; peso: decimal g; botones: entero; batería: entero mAh | No |
+| Monitores | Diagonal (`diagonal_in`), frecuencia máxima (`refresh_hz`) | Decimal pulgadas; decimal Hz; uno | Sí; rango inclusivo |
+| Monitores | Resolución nativa (`native_resolution`) | Par de enteros positivos ancho/alto, píxeles | Sí; selección de pares |
+| Monitores | Relación de aspecto (`aspect_ratio`), panel (`panel_type`), respuesta (`response_ms`), método de respuesta (`response_method`), brillo (`brightness_nits`), puertos (`ports`), sincronización (`variable_sync`) | Aspecto/panel/método: texto; respuesta: decimal ms y método requerido cuando se informa; brillo: decimal cd/m²; puertos/sincronización: conjunto de etiquetas técnicas | No |
+| Laptops | Familia/modelo CPU (`cpu_family`), almacenamiento (`storage_type`), sistema operativo (`factory_os`), puertos (`ports`) | Texto o conjunto cuando haya varias interfaces | CPU: Sí, selección múltiple; otros: no |
+| Laptops | RAM (`ram_bytes`), almacenamiento (`storage_bytes`), peso (`weight_kg`) | Capacidad: entero en bytes; peso: decimal kg | RAM y capacidad: rangos inclusivos; peso: no |
+| Laptops | GPU integrada (`integrated_gpu`), GPU dedicada (`dedicated_gpu`) | Texto del modelo; cada campo opcional e independiente | No |
+| Laptops | Pantalla (`display_diagonal_in`), resolución (`display_resolution`), frecuencia (`display_refresh_hz`) | Decimal pulgadas; par de enteros en píxeles; decimal Hz | No |
+| Teclados | Conexión (`connection`) | Conjunto de enum: cable, radio 2,4 GHz, Bluetooth | Sí; selección múltiple |
+| Teclados | Distribución (`layout`), formato (`form_factor`) | Texto/código normalizado con etiqueta original conservada | Sí; selección múltiple |
+| Teclados | Switch (`switch_type`), retroiluminación (`backlight`) | Texto del fabricante/editor | No |
+| Teclados | Teclado numérico (`has_numpad`) | Booleano informado, desconocido o no corresponde | No |
+| Teclados | Conexiones simultáneas (`simultaneous_connections`) | Entero positivo | No |
+| Tarjetas madre | Socket (`socket`), formato (`form_factor`) | Texto/código normalizado con etiqueta original conservada | Sí; selección múltiple |
+| Tarjetas madre | Generación de memoria (`memory_generation`) | Texto/código estandarizado (por ejemplo, DDR5) | Sí; selección múltiple |
+| Tarjetas madre | Chipset (`chipset`), almacenamiento admitido (`storage_interfaces`), puertos (`rear_ports`) | Chipset: texto; interfaces/puertos: conjuntos de etiquetas | No |
+| Tarjetas madre | Ranuras de memoria (`memory_slots`), expansión (`expansion_slots`) | Enteros no negativos | No |
+| Tarjetas madre | Velocidad de red (`network_gbps`) | Decimal Gbit/s | No |
+| Procesadores | Socket (`socket`) | Texto/código conservado | Sí; selección múltiple |
+| Procesadores | Núcleos (`core_count`), hilos (`thread_count`) | Enteros positivos | Sí; rangos inclusivos |
+| Procesadores | Frecuencia base/turbo (`base_clock_mhz`, `boost_clock_mhz`) | Decimal MHz | No |
+| Procesadores | Caché (`cache_bytes`), potencia (`power_w`) | Entero en bytes; decimal W | No |
+| Procesadores | Memoria admitida (`memory_types`) | Conjunto de tipo/velocidad declarados por el fabricante | No |
+| Procesadores | Gráficos integrados (`integrated_graphics`) | Booleano informado, desconocido o no corresponde | No |
+| Tarjetas de video | VRAM (`vram_bytes`) | Capacidad entera en bytes | Sí; rango inclusivo |
+| Tarjetas de video | GPU (`gpu_model`), memoria (`memory_type`) | Texto del fabricante | No |
+| Tarjetas de video | Ancho de bus (`memory_bus_bits`), frecuencia (`clock_mhz`), potencia (`power_w`), dimensión (`dimension_mm`) | Bus: entero bits; frecuencia: decimal MHz; potencia: decimal W; dimensión: terna de decimales mm | No |
+| Tarjetas de video | Conectores de energía (`power_connectors`), salidas (`display_outputs`) | Conjuntos de etiquetas técnicas normalizadas | No |
+| Consolas | Familia/generación (`family_generation`) | Texto/código normalizado con etiqueta original conservada | Sí; selección múltiple |
+| Consolas | Edición (`edition`) | Enum: digital, con unidad | Sí; selección múltiple |
+| Consolas | Almacenamiento (`storage_bytes`) | Capacidad entera en bytes | Sí; rango inclusivo |
+| Consolas | CPU/GPU (`cpu_model`, `gpu_model`), memoria (`memory_bytes`) | Modelo: texto del fabricante; memoria: capacidad en bytes | No |
+| Consolas | Salidas de video (`video_outputs`), puertos (`ports`), control (`included_controller`), compatibilidad (`compatibility`) | Conjuntos de etiquetas; compatibilidad y control en texto editorial | No |
+
+En valores de conjunto, duplicados se eliminan después de normalizar espacios y
+caja, preservando etiquetas originales para presentación. No se descartan modelos,
+conectores o tecnologías desconocidos: se guardan como texto fuente y requieren
+revisión editorial. Un tipo, unidad o cardinalidad incorrectos bloquea el guardado;
+un atributo obligatorio incorrecto también bloquea la publicación según CAT-CA-026.
 
 ## Identidad y variantes
 

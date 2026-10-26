@@ -21,6 +21,7 @@ El nombre del producto aún no está decidido. En esta fase solo se crean docume
 11. Seguir el [backlog SDD y de implementación planificada](specs/001-catalogo/tasks.md).
 12. Consultar la [revisión de la constitución técnica de referencia](docs/constitution-review.md).
 13. Consultar las [convenciones de desarrollo, estructura física y Git](docs/development-conventions.md).
+14. Revisar los [hallazgos y correcciones de la revisión SDD](docs/sdd-review.md).
 
 ## Qué significa «listo»
 
@@ -65,9 +66,9 @@ implementada ni ejecutada.
 
 ## Estado de la planificación
 
-- Baseline aprobada el 2026-10-26: constitución v1.0, spec v0.20, plan v0.3,
-  convenciones v1.0 y decisiones ADE-001 a ADE-019.
-- Los 41 criterios CAT-CA tienen cobertura en 40 escenarios CAT-CP; son diseños,
+- Baseline inicial aprobada el 2026-10-26 y revisión correctiva aprobada al
+  solicitar aplicar el plan: spec v0.21, plan v0.4 y decisiones ADE-001 a ADE-023.
+- Los 47 criterios CAT-CA tienen cobertura en 46 escenarios CAT-CP; son diseños,
   no pruebas implementadas ni ejecutadas.
 - El backlog detallado está en `specs/001-catalogo/implementation-backlog.md`;
   todas las tareas están pendientes y no representan implementación realizada.

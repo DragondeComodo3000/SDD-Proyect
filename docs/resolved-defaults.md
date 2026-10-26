@@ -1,6 +1,6 @@
 # Defaults de producto resueltos por delegación
 
-Estado: **defaults ADE-001 a ADE-016 adoptados en la baseline aprobada el 2026-10-26**.
+Estado: **defaults ADE-001 a ADE-023 adoptados en la baseline y su revisión correctiva**.
 El responsable pidió que el agente resolviera las ambigüedades restantes sin
 contradecir el alcance existente. Se conserva que fueron decisiones delegadas;
 su adopción como baseline no autoriza implementación.
@@ -19,7 +19,7 @@ su adopción como baseline no autoriza implementación.
 | PROP-008 | Resuelta por DEC-022/023: una ficha publicada y revisada por categoría; sin cuota adicional ni promesa de exhaustividad. | Mínimo de lanzamiento verificable. | CAT-RF-011. |
 | PROP-009 | Resuelta como ADE-003: búsqueda parcial sin acentos/mayúsculas por marca/modelo/nombre; relevancia exacta/prefijo/substring como inicial; límite 100; 24 por página. | Evita prometer búsqueda en especificaciones o motor externo. | CAT-RF-002. |
 | PROP-010 | Resuelta como ADE-004: AND entre grupos, OR en marcas, rangos inclusivos, precio desconocido excluido, error de rango inválido sin aplicar sus límites y limpieza que preserva query/orden. | Hace predecible la combinación de filtros. | CAT-RF-003/017. |
-| PROP-011 | Resuelta como ADE-004: conteo antes de paginar; ausentes al final; desempate por nombre normalizado y slug. | Orden determinista con datos incompletos. | CAT-RF-016/017. |
+| PROP-011 | Resuelta como ADE-004/ADE-023: conteo de productos antes de paginar; datos ausentes al final, incluido precio en ambos sentidos; orden principal explícito, relevancia secundaria con búsqueda y luego nombre normalizado/slug. | Orden determinista sin mezclar fichas ni dar prioridad accidental a valores ausentes. | CAT-RF-003/016/017. |
 | PROP-012 | Resuelta como ADE-015: preferencia de sistema en primera visita, selección manual persistida solo localmente. | Sencillo y consistente con cuenta opcional. | CAT-RF-018. |
 
 ## Catálogo y publicación
@@ -34,7 +34,9 @@ su adopción como baseline no autoriza implementación.
   normalizados y faltantes no equivalen a cero.
 - El precio se ingresa manualmente por el equipo con etiqueta «Precio aproximado»
   y moneda USD. Fuentes y método los decide el equipo al cargarlo. Si no hay valor,
-  no mostrar un número inventado y excluir la ficha de filtros y órdenes por precio.
+  no mostrar un número inventado ni hacerlo coincidir con rangos de precio; en
+  órdenes por precio, colocar esos resultados después de los precios conocidos,
+  tanto ascendente como descendentemente.
 - Aceptar año, mes o fecha completa para lanzamiento según precisión disponible.
   Mostrar la precisión cargada sin inventar día o región.
 - Preferir fuente oficial del fabricante para especificaciones; registrar fuente
@@ -64,7 +66,8 @@ su adopción como baseline no autoriza implementación.
 
 PROP-001 a PROP-012 quedaron convertidas en decisiones delegadas ADE-001 a
 ADE-016 y criterios CAT-CA-018 a CAT-CA-041. ADE-017 a ADE-019 completan
-convenciones, campos mínimos y ventana de popularidad. Todas fueron adoptadas en
-la baseline aprobada. Permanecen diferidos hosting/presupuesto, revisión legal por
+convenciones, campos mínimos y ventana de popularidad. La revisión correctiva
+actualiza los defaults afectados y los criterios hasta CAT-CA-047. ADE-020 a ADE-023 resuelven
+los hallazgos de revisión registrados en `docs/sdd-review.md`. Permanecen diferidos hosting/presupuesto, revisión legal por
 mercado y marca/dominio (PND-012, PND-020 y PND-021); no bloquean desarrollo local,
 pero sí las operaciones de producción/publicación que requieren resolverlos.

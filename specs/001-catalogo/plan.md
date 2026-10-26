@@ -1,8 +1,8 @@
 # CAT — Arquitectura y plan técnico
 
-Versión: 0.3. Estado: **baseline aprobada el 2026-10-26**.  
-Spec de referencia: [`spec.md`](spec.md), versión 0.20, aprobada.  
-Decisiones: DEC-001 a DEC-024 confirmadas; ADE-001 a ADE-019 adoptadas en [`docs/decisions.md`](../../docs/decisions.md).  
+Versión: 0.4. Estado: **revisión correctiva aprobada por instrucción explícita del responsable**.
+Spec de referencia: [`spec.md`](spec.md), versión 0.21, aprobada.
+Decisiones: DEC-001 a DEC-024 confirmadas; ADE-001 a ADE-023 adoptadas en [`docs/decisions.md`](../../docs/decisions.md).
 Implementación: **no autorizada**. Ver [`docs/baseline.md`](../../docs/baseline.md).
 
 > El plan está aprobado como diseño técnico y no habilita por sí solo escribir el producto.
@@ -60,7 +60,7 @@ antes de implementar.
 | Búsqueda inicial | Búsqueda de marca, modelo y nombre mediante capacidades relacionales, según ADE-003 | El contrato no requiere motor especializado | CAT-RF-002; CAT-CA-019 |
 | Despliegue | Proveedor no elegido; usar un entorno gestionado compatible con el stack hasta conocer presupuesto y región de servicio | Mantiene portabilidad sin inventar costos | CAT-RNF-002 a 004; PND-012 |
 | Dependencias Python | `uv`, `pyproject.toml` y `uv.lock` versionado; versiones bloqueadas y actualizadas mediante cambio revisado | Instalaciones reproducibles con una sola herramienta de proyecto | ADE-017; `docs/development-conventions.md` |
-| Pruebas | Runner integrado de Django con `django.test.TestCase`; `manage.py test` | Evita añadir un runner distinto al framework sin necesidad demostrada | CAT-CA-001 a 041; ADE-017 |
+| Pruebas | Runner Django: `TestCase` para casos habituales y `TransactionTestCase` para commit/rollback, bloqueos y concurrencia | Verifica transacciones reales con el mismo runner y sin dependencias nuevas | CAT-CA-001 a 047; ADE-017 |
 | Formato y lint | Ruff para formato y análisis estático | Una herramienta cubre ambos usos y se configura en `pyproject.toml` | ADE-017; CI |
 | Base local/CI | PostgreSQL 18 mediante Docker Compose en desarrollo y servicio efímero en CI | Verifica migraciones, índices y restricciones en el motor objetivo | ADE-016; PND-012 para alojamiento de producción |
 
@@ -128,7 +128,7 @@ Flujo editorial: borrador → revisión pendiente → publicado → retirado. Un
 corrección crea una nueva revisión y la versión pública permanece hasta que el
 Revisor de catálogo publique la nueva. Los eventos conservan actor y fecha.
 Comentario: pendiente → aprobado/rechazado → aprobación retirada; solo aprobados
-son públicos. Estos defaults esperan la aprobación de la baseline completa.
+son públicos. Estos defaults forman parte de la baseline aprobada.
 
 ## 5. Contratos de interfaz y flujos de datos
 
@@ -145,8 +145,10 @@ Rutas candidatas de implementación; los slugs y la forma final de URL se pueden
 | `/admin/` | Administración interna restringida | Modelos simples autorizados | CAT-RF-010, 011 |
 
 Flujo de consulta: normalizar la consulta → validar filtros contra el diccionario
-de la categoría → combinar los grupos según CAT-CA-020 a 022 → calcular el total
-de coincidencias → ordenar incluyendo desempates y ausentes → paginar → renderizar.
+de la categoría → combinar filtros generales por grupo y filtros técnicos/precio
+en una misma variante según CAT-CA-020 a 022/042 → obtener productos únicos y su
+variante representada según CAT-CA-043 → aplicar orden y desempates/ausencias →
+calcular conteo de productos → paginar → renderizar.
 La consulta se conserva en parámetros GET para permitir recargar y compartir la vista.
 
 Flujo de popularidad: registrar únicamente apertura desde resultados internos →
@@ -179,10 +181,10 @@ erDiagram
   PRODUCT ||--o{ PRODUCT_OPEN_EVENT : recibe
   PRODUCT ||--o{ USEFULNESS_VOTE : recibe
   PRODUCT ||--o{ COMMENT : recibe
-  USER ||--o{ USEFULNESS_VOTE : emite
-  USER ||--o{ COMMENT : escribe
-  ANONYMOUS_ACTOR ||--o{ USEFULNESS_VOTE : emite
-  ANONYMOUS_ACTOR ||--o{ COMMENT : escribe
+  USER o|--o{ USEFULNESS_VOTE : emite
+  USER o|--o{ COMMENT : escribe
+  ANONYMOUS_ACTOR o|--o{ USEFULNESS_VOTE : emite
+  ANONYMOUS_ACTOR o|--o{ COMMENT : escribe
   USER ||--o{ GROUP_MEMBERSHIP : obtiene
   GROUP ||--o{ GROUP_MEMBERSHIP : asigna
   PRODUCT_REVISION ||--o{ FACT_SOURCE : respalda
@@ -196,17 +198,17 @@ erDiagram
 | `Brand` | id, nombre oficial, slug/alias de búsqueda | Normalización, marcas homónimas y alias |
 | `Product` | identidad estable: categoría, marca, modelo, slug, estado de retiro y referencia a revisión pública vigente | Votos, comentarios y aperturas apuntan aquí para sobrevivir a revisiones; identidad según ADE-006 |
 | `ProductRevision` | número, contenido completo de una versión, descripción, lanzamiento, pros/contras, estado, editor, revisor y fechas | Corrección copia la versión vigente; publicar cambia la referencia pública atómicamente y archiva la anterior; guardado obsoleto no sobrescribe otra edición; ADE-005/009 |
-| `Variant` | revisión padre, id comercial/SKU, color/configuración, atributos propios y precio/imágenes cuando varíen | Una selección nunca hereda valores incompatibles; pertenece a una revisión inmutable tras publicar (ADE-006) |
-| `AttributeDefinition` | categoría, clave, etiqueta, tipo, unidad, opciones, obligación, filtro/publicación | Diccionario inicial en `category-data.md` (ADE-007) |
+| `Variant` | revisión padre, clave estable por configuración, color/configuración, atributos propios, precio/imágenes cuando varíen y bandera predeterminada | Cada revisión tiene una o más variantes y exactamente una predeterminada; conserva su clave si la configuración comercial no cambia (ADE-006/020) |
+| `AttributeDefinition` | categoría, clave estable, etiqueta, tipo, unidad, cardinalidad, valores admitidos, validación, obligatoriedad, filtro y presentación | Diccionario inicial completo en `category-data.md`; valida al guardar y publicar (ADE-007/022) |
 | `AttributeValue` | variante, atributo, valor tipado, estado del dato y referencia interna | Normalizar unidades; distinguir estados de ausencia |
 | `FactSource` | revisión, hecho/atributo respaldado, título/URL o identificador, tipo de fuente y fecha de verificación | Atributos técnicos obligatorios tienen al menos una fuente interna; conservar evidencia suficiente para revisión (ADE-008/018) |
 | `ProductImage` | revisión/variante, archivo, texto alternativo, orden, fuente y estado de permiso | Solo medios con permiso de uso verificado; cambiar imagen crea una revisión (ADE-008) |
 | `PriceEntry` | revisión/variante, importe decimal USD, estado visible | A lo sumo un precio visible por revisión/variante; positivo y máximo dos decimales; opcional; método/fuente los carga el equipo (DEC-013, ADE-004) |
 | `FeaturedSelection` | producto, posición, vigencia, Editor que propuso, Revisor que publicó | Se muestra si no hay aperturas válidas (ADE-002/005) |
 | `ProductOpenEvent` | producto, instante UTC de apertura válida | Un evento por apertura desde búsqueda; no guarda actor/IP/user-agent; consulta exacta de 30 días y borrado de eventos expirados (ADE-019) |
-| `User` | modelo Django propio desde migración inicial: email único de inicio de sesión, hash de contraseña gestionado por Django, alias público, verificación, estado y flags internos | No almacenar contraseña en texto plano; mantener correo privado; ADE-014 |
+| `User` | modelo Django propio desde migración inicial: email único de inicio de sesión, hash de contraseña gestionado por Django, alias público, verificación, estado y flags internos | Al borrar cuenta, invalidar sesiones, borrar votos/aportes no públicos y conservar comentarios aprobados sin referencias de autoría; ADE-014/021 |
 | `GroupMembership` | usuario y grupo Django: Editor, Catalog Reviewer, Moderator | Grupos asignan permisos por separado; se pueden combinar según ADE-005 |
-| `AnonymousActor` | hash del token aleatorio, fecha de creación y expiración | Nunca guardar el token original, IP o huella digital; purgar tokens expirados (ADE-011) |
+| `AnonymousActor` | hash opcional de token vigente, fecha de creación y vencimiento exactamente 365 días después de emitirse (12 meses de vigencia) | En el instante de vencimiento o después, eliminar el hash; nunca guardar token original, IP o huella; conservar fila interna solo cuando tenga aportes asociados (ADE-011/021) |
 | `UsefulnessVote` | producto, valor sí/no, usuario o actor anónimo, fecha | Exactamente un actor; unicidad por actor/producto; cambio atómico (ADE-011/012) |
 | `Comment` | producto, autor registrado/anónimo, texto, estado, fechas y moderador | Exactamente un actor; 1–2.000 caracteres; auditoría; solo aprobados públicos (ADE-013) |
 | `EditorialEvent` | actor, entidad/revisión, acción y fecha | Registrar publicación, corrección, retiro, revisión periódica y moderación sin conservar contenido personal innecesario |
@@ -214,8 +216,10 @@ erDiagram
 El usuario registrado extiende `AbstractUser` de Django con `email` como campo
 de inicio de sesión y `username` desactivado; se configura como `AUTH_USER_MODEL`
 antes de la primera migración. Los grupos Django representan los roles internos
-y la autorización se comprueba en servidor. Cada voto/comentario debe tener
-exactamente un autor: cuenta registrada o actor anónimo.
+y la autorización se comprueba en servidor. Cada voto/comentario nuevo referencia
+exactamente un `User` o `AnonymousActor` (restricción XOR). Tras borrar una cuenta,
+un comentario aprobado puede quedar sin ambas referencias porque su autoría se
+elimina; ese estado no se admite para crear aportes nuevos.
 
 Los grupos internos se mapean a `catalog_editor`, `catalog_reviewer` y
 `moderator`; una cuenta puede pertenecer a más de uno. Las cuentas públicas no
@@ -273,10 +277,10 @@ Los CAT-CP existentes están diseñados en [`acceptance.md`](acceptance.md).
 
 | Nivel | Qué verificar | Evidencia al implementar |
 |---|---|---|
-| Dominio | Ventana de popularidad de 30 días, filtros y orden, normalización de búsqueda, transiciones editoriales y de comentarios, votos editables, valores ausentes y atributos por categoría | `django.test.TestCase` y pruebas aisladas por regla/caso límite |
-| Integración de datos | Restricciones de unicidad, transacciones concurrentes de voto, visibilidad por estado, filtros SQL, migraciones y fixtures ficticios | `TestCase` contra PostgreSQL 18; sin depender de datos reales |
+| Dominio | Ventana de popularidad de 30 días, filtros, variantes, identidad, transiciones editoriales/comentarios, votos, ausencias y atributos | `django.test.TestCase` y pruebas aisladas por regla/caso límite |
+| Integración de datos | Restricciones XOR, transacciones concurrentes, commit/rollback, visibilidad, filtros SQL y fixtures ficticios | `TransactionTestCase` contra PostgreSQL 18 para transacciones reales; `TestCase` para integración habitual |
 | Interfaz/rutas | Estados de carga, vacío, error, filtro inválido, ficha retirada, envío pendiente, permisos; navegación de teclado y tema | Django test client para respuestas HTTP; revisión manual de teclado y viewport |
-| Flujo completo | Búsqueda → ficha → voto/comentario → aprobación → publicación; Editor publica; Moderador aprueba; usuario sin permiso recibe rechazo | Pruebas de integración Django ligadas a CAT-CP; sin framework E2E adicional en MVP |
+| Flujo completo | Búsqueda → ficha/variante → voto/comentario → aprobación → publicación; Revisor publica; Moderador aprueba; usuario sin permiso recibe rechazo | Pruebas de integración Django ligadas a CAT-CP; sin framework E2E adicional en MVP |
 | Calidad no funcional | WCAG 2.2 AA, rendimiento de campo, seguridad de sesiones, derechos de medios y respaldo/restauración | CAT-CA-037 a CAT-CA-039; hosting, revisión legal y operación pendientes por PND-012/020 |
 | Lanzamiento | Cobertura mínima, revisión de contenido, privacidad, permisos, respaldo y ruta de reversión | Checklist con resultado, responsable, fecha y evidencia por gate |
 
@@ -321,7 +325,8 @@ presupuesto o tráfico real permanecen como gates PND-012.
 | Versión | Cambio | Evidencia |
 |---|---|---|
 | 0.1–0.2 | Propuestas iniciales de arquitectura y cobertura de requisitos. | Historial previo de planificación. |
-| 0.3 | Confirma Django por DEC-024; añade revisiones editoriales inmutables, cuenta Django concreta, campos mínimos por categoría, ventana exacta de popularidad, estructura física y separación de gates; corrige TDEC-005 para usar eventos sin identidad. | Hallazgos QA resueltos; baseline aprobada 2026-10-26. |
+| 0.3 | Confirma Django por DEC-024; añade revisiones editoriales inmutables, cuenta Django concreta, campos mínimos por categoría, ventana exacta de popularidad, estructura física y separación de gates; corrige TDEC-005 para usar eventos sin identidad. | Hallazgos QA resueltos; baseline inicial aprobada 2026-10-26. |
+| 0.4 | Alinea relaciones de autoría y permisos; define proyección/selección de variantes, esquema de atributos, borrado y expiración de identidad, precedencia de orden y gates de medición de campo. | REV-SDD-001 a REV-SDD-009; revisión correctiva autorizada por el responsable. |
 
 Al aprobarse una nueva versión de spec o plan, actualizar juntas las referencias
 de tareas, matrices de trazabilidad y registro de decisiones. La versión 0.3
@@ -383,12 +388,16 @@ el modelo de usuario/grupos Django y la separación de gates descrita abajo.
 
 Para preparar el backlog detallado de código se requieren estos pasos:
 
-1. **Completado:** cobertura de CAT-CA-001 a CAT-CA-041 mediante escenarios
+1. **Completado:** cobertura de CAT-CA-001 a CAT-CA-047 mediante escenarios
    CAT-CP y trazabilidad documentada.
 2. **Completado:** revisión QA independiente y resolución de los hallazgos
    bloqueantes.
-3. **Completado:** aprobación explícita de la spec v0.20, el plan v0.3 y las
+3. **Completado:** aprobación inicial de la spec v0.20, el plan v0.3 y las
    convenciones ADE-017, registrada en `docs/baseline.md`.
+4. **Completado:** revisión correctiva REV-SDD-001 a REV-SDD-009, actualizada a
+   spec v0.21, plan v0.4 y decisiones ADE-020 a ADE-023, con 47 criterios en 46
+   escenarios trazados. La solicitud del responsable para aplicar las correcciones
+   queda registrada como aprobación de esta revisión documental.
 
 El backlog de implementación está preparado; la aprobación de baseline no
 autoriza por sí sola a ejecutar sus tareas. Antes de iniciar implementación se revalidarán las versiones

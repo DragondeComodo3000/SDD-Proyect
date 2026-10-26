@@ -1,9 +1,9 @@
 # CAT — Catálogo público y mantenimiento editorial
 
-Versión: 0.20. Estado: **baseline aprobada el 2026-10-26**.
+Versión: 0.21. Estado: **baseline aprobada el 2026-10-26**.
 Implementación: **no autorizada**. Ver [`docs/baseline.md`](../../docs/baseline.md).
 Fuentes: `docs/product-vision.md`, decisiones DEC-001 a DEC-024 y decisiones
-delegadas ADE-001 a ADE-019 de `docs/decisions.md`.
+delegadas ADE-001 a ADE-023 de `docs/decisions.md`.
 
 ## Objetivo
 
@@ -21,23 +21,26 @@ requisitos.
 |---|---|---|---|
 | CAT-RF-001 | Mostrar productos más buscados según aperturas de fichas desde búsquedas internas durante los últimos 30 días; al no haber actividad válida, usar destacados manuales. Cada apertura repetida suma. | DEC-003 y DEC-015 a DEC-019; ADE-002 | CAT-CA-012, 013 y 018. |
 | CAT-RF-002 | Permitir encontrar productos mediante un buscador superior. | DEC-003; ADE-003 | CAT-CA-019 define campos, normalización, límite y orden. |
-| CAT-RF-003 | Filtrar por categoría, marcas, precio USD, año y atributos técnicos de la categoría. | DEC-003, DEC-011; ADE-004, ADE-007 | CAT-CA-004, 005 y 020 a 022; diccionarios en `category-data.md`. |
+| CAT-RF-003 | Filtrar por categoría, marcas, precio USD, año y atributos técnicos de la categoría. Todos los filtros técnicos y de precio coinciden sobre una misma variante. | DEC-003, DEC-011; ADE-004, ADE-007, ADE-020 | CAT-CA-004, 005, 020 a 022 y 042; diccionarios en `category-data.md`. |
 | CAT-RF-004 | Mostrar imagen y descripción inicial del producto. | DEC-004; ADE-008, ADE-009 | CAT-CA-026 y 029; autorización de imagen verificable antes de publicar. |
 | CAT-RF-005 | Mostrar variantes de colores o modelos. | DEC-004; ADE-006 | CAT-CA-023 fija identidad y diferencias técnicas. |
-| CAT-RF-006 | Mostrar detalles técnicos correspondientes a la categoría y variante. | DEC-004, DEC-007; ADE-006, ADE-007 | CAT-CA-023 y 024. |
-| CAT-RF-007 | Mostrar el importe cargado manualmente bajo «Precio aproximado», en USD. | DEC-004, DEC-006, DEC-013; ADE-004, ADE-006 | CAT-CA-010, 023 y 027. Fuente y método del precio quedan a cargo del equipo al cargarlo. |
+| CAT-RF-006 | Mostrar detalles técnicos correspondientes a la categoría y variante, validados contra el esquema de atributos. | DEC-004, DEC-007; ADE-006, ADE-007, ADE-022 | CAT-CA-023, 024 y 047. |
+| CAT-RF-007 | Mostrar el importe cargado manualmente bajo «Precio aproximado», en USD. | DEC-004, DEC-006, DEC-013; ADE-004, ADE-006, ADE-020 | CAT-CA-010, 023, 027 y 043. Fuente y método del precio quedan a cargo del equipo al cargarlo. |
 | CAT-RF-008 | Mostrar fecha de lanzamiento conservando la precisión conocida. | DEC-004; ADE-004 | CAT-CA-028. |
 | CAT-RF-009 | Mostrar pros y contras del producto como juicio editorial sustentado. | DEC-004; ADE-008, ADE-009 | CAT-CA-026 y 029. |
 | CAT-RF-010 | Permitir al equipo introducir y mantener manualmente los datos con revisión, auditoría y revisión anual de fichas activas. | DEC-005; ADE-005, ADE-009 | CAT-CA-025, 026 y 040. |
 | CAT-RF-011 | Incluir ocho categorías, cada una con al menos una ficha revisada al lanzamiento; sin cuota adicional. | DEC-007, DEC-022, DEC-023; ADE-005, ADE-007, ADE-009 | CAT-CA-017, 025 y 026. |
-| CAT-RF-012 | Permitir un voto editable por identidad y producto sobre la utilidad de la información; mostrar resultados separados. | DEC-008, DEC-009, DEC-020; ADE-011, ADE-012 | CAT-CA-014, 030 y 031. |
-| CAT-RF-013 | Permitir comentarios anónimos o con cuenta sujetos a aprobación previa. | DEC-008 a DEC-010; ADE-011, ADE-013 | CAT-CA-001 a 003, 031 a 033. |
-| CAT-RF-014 | Ofrecer registro/inicio de sesión opcionales y recuperación de acceso. | DEC-009; ADE-014 | CAT-CA-034 y 035; revisión legal de privacidad queda como gate público PND-020. |
+| CAT-RF-012 | Permitir un voto editable por identidad y producto sobre la utilidad de la información; mostrar resultados separados. | DEC-008, DEC-009, DEC-020; ADE-011, ADE-012, ADE-021 | CAT-CA-014, 030, 031, 044 y 046. |
+| CAT-RF-013 | Permitir comentarios anónimos o con cuenta sujetos a aprobación previa. | DEC-008 a DEC-010; ADE-011, ADE-013, ADE-021 | CAT-CA-001 a 003, 031 a 033, 044 y 046. |
+| CAT-RF-014 | Ofrecer registro/inicio de sesión opcionales y recuperación de acceso. | DEC-009; ADE-014, ADE-021 | CAT-CA-034, 035 y 045; revisión legal de privacidad queda como gate público PND-020. |
 | CAT-RF-015 | Permitir que el Moderador designado modere comentarios; pendientes/rechazados no son públicos. | DEC-010, DEC-021; ADE-005, ADE-013 | CAT-CA-001 a 003, 015, 016 y 033. |
-| CAT-RF-016 | Ofrecer órdenes por más buscados, lanzamiento y precio; con búsqueda textual, ofrecer además «Relevancia». | DEC-011; ADE-002 a ADE-004 | CAT-CA-006, 018, 019 y 022. |
-| CAT-RF-017 | Mostrar filtros activos y conteo, permitir limpiar filtros. | DEC-011; ADE-004 | CAT-CA-007, 008, 020 a 022. |
+| CAT-RF-016 | Ofrecer órdenes por más buscados, lanzamiento y precio; con búsqueda textual, ofrecer además «Relevancia». | DEC-011; ADE-002 a ADE-004, ADE-023 | CAT-CA-006, 018, 019, 022, 028 y 043. |
+| CAT-RF-017 | Mostrar filtros activos y conteo, permitir limpiar filtros. | DEC-011; ADE-004, ADE-020 | CAT-CA-007, 008, 020 a 022 y 042. |
 | CAT-RF-018 | Permitir tema claro u oscuro desde menú separado, con preferencia persistente local. | DEC-011; ADE-015 | CAT-CA-009 y 036. |
 | CAT-RF-019 | Mostrar estados diferenciados de carga, error, vacío y dato no disponible en las vistas públicas correspondientes. | ADE-010 | CAT-CA-041. |
+
+Las variantes, autoría de aportes, expiración de identidades y esquema de
+atributos quedan concretados en CAT-CA-042 a CAT-CA-047.
 
 ### Criterio inicial de portada (CAT-RF-001)
 
@@ -184,7 +187,7 @@ equipo conserva la elección de fuente y método al cargarlo según DEC-013.
 
 | ID | Requisito | Fuente | Criterios y condiciones |
 |---|---|---|---|
-| CAT-RNF-001 | La interfaz, mensajes y contenidos editoriales públicos de la primera versión estarán en español. | DEC-014 | CAT-CA-011, 019 a 041. |
+| CAT-RNF-001 | La interfaz, mensajes y contenidos editoriales públicos de la primera versión estarán en español. | DEC-014 | CAT-CA-011, 019 a 047. |
 | CAT-RNF-002 | Las vistas públicas y de equipo apuntarán a WCAG 2.2 AA y serán utilizables por teclado y a 360 CSS px sin scroll horizontal de página. | ADE-010 | CAT-CA-037; requiere revisión automatizada y manual al implementar. |
 | CAT-RNF-003 | Las vistas públicas cumplirán metas Core Web Vitals en el percentil 75 por dispositivo cuando exista tráfico suficiente. | ADE-010 | CAT-CA-038; hosting y medición operativa son previos al despliegue. |
 | CAT-RNF-004 | Los datos personales y aportes del público se protegerán con minimización de datos, autorización en servidor y salida segura de contenido. | ADE-011 a ADE-014 | CAT-CA-031, 033 a 035 y 039; política legal por mercado es gate PND-020. |
@@ -199,8 +202,8 @@ equipo conserva la elección de fuente y método al cargarlo según DEC-013.
 
 ## Contratos funcionales concretados por delegación
 
-Los criterios CAT-CA-018 a CAT-CA-041 aplican las decisiones delegadas ADE-001 a
-ADE-016 y las precisiones ADE-018/ADE-019. ADE-017 gobierna el diseño técnico,
+Los criterios CAT-CA-018 a CAT-CA-047 aplican las decisiones delegadas ADE-001 a
+ADE-016 y ADE-018 a ADE-023. ADE-017 gobierna el diseño técnico,
 no el comportamiento de producto. Son defaults de diseño y cierres técnicos,
 no respuestas textuales anteriores. El responsable aprobó estos defaults junto
 con la baseline; su origen delegado queda conservado en el registro de decisiones.
@@ -219,8 +222,9 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
   diacríticos en marca, modelo y nombre. Con término, ordenará exactas antes que
   prefijos y estos antes que coincidencias internas; el selector ofrecerá
   «Relevancia» como orden inicial, además de las cuatro opciones de CAT-RF-016.
-  Cuando la persona elija otro orden, este prevalecerá y relevancia servirá de
-  desempate. Una consulta vacía mostrará el catálogo con orden inicial «Más
+  Cuando la persona elija otro orden, este será el criterio principal; con una
+  consulta, la relevancia desempatará antes del nombre normalizado y el slug.
+  Una consulta vacía mostrará el catálogo con orden inicial «Más
   buscados». Se mostrarán 24 resultados por página y la consulta/filtros/orden
   quedarán en parámetros GET. Una consulta de más de 100 caracteres se rechazará
   con mensaje en español y no ejecutará búsqueda ni devolverá resultados.
@@ -229,6 +233,11 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
   de marcas, bastará coincidir con una marca seleccionada. Los rangos de precio
   y año incluirán ambos extremos; los productos sin ese dato no coincidirán con
   el filtro correspondiente.
+- **CAT-CA-042 (CAT-RF-003, CAT-RF-017):** Cuando una búsqueda aplique filtros
+  técnicos o de precio a productos con variantes, todos esos filtros deberán
+  coincidir en una misma variante publicada. Los filtros generales de categoría,
+  marca y año se aplicarán al producto. El conjunto de resultados y su conteo
+  incluirán cada producto una sola vez, aunque más de una variante coincida.
 - **CAT-CA-021 (CAT-RF-003, CAT-RF-017):** Si el precio mínimo supera al máximo,
   el sistema deberá mostrar un error y no aplicar ninguno de los dos límites; los
   demás filtros válidos sí se aplicarán y se mostrarán con el conteo actualizado.
@@ -236,9 +245,9 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
   deberá limpiar solo los filtros técnicos incompatibles y explicar cuáles quitó.
   Cuando se elija «Limpiar filtros», deberá quitar categoría, marca, precio, año
   y filtros técnicos, pero conservar el término de búsqueda y el orden actual.
-  El conteo mostrado será el total antes de paginar. En cualquier orden, los datos
-  ausentes irán después de los conocidos; los empates se resolverán por nombre
-  normalizado y slug.
+  El conteo mostrado será el total de productos antes de paginar. El criterio
+  elegido será el principal; con consulta, relevancia desempatará antes del nombre
+  normalizado y slug. Los datos ausentes irán después de los conocidos.
 
 ### Identidad y calidad del catálogo
 
@@ -246,11 +255,30 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
   variantes del mismo producto, el sistema deberá identificar la seleccionada y
   mostrar solo sus atributos, imagen y precio propios; no heredará valores
   incompatibles. Diferencias de generación, plataforma o compatibilidad que
-  cambien la identidad técnica deberán tener fichas separadas.
+  cambien la identidad técnica deberán tener fichas separadas. Cada revisión
+  publicada tendrá al menos una variante y exactamente una predeterminada. La clave
+  estable de variante se conserva entre revisiones si la configuración comercial
+  es la misma.
+- **CAT-CA-043 (CAT-RF-003, CAT-RF-007, CAT-RF-016):** Cuando un producto
+  aparezca en un listado, con o sin filtros, aparecerá una sola vez y su tarjeta
+  representará una variante publicada del conjunto que hizo coincidir al producto.
+  Se elegirá la variante coincidente con menor precio conocido. En empate se
+  elegirá primero la predeterminada si coincide y luego la clave estable de variante.
+  Si ninguna variante coincidente tiene precio, se usará la predeterminada si
+  coincide; en otro caso, la variante coincidente con clave estable menor. Los
+  órdenes por precio usarán el importe de la variante representante.
+  Abrir el resultado seleccionará esa variante; una apertura directa sin selección
+  usará la predeterminada. Si se solicita una clave no disponible, el sistema
+  mostrará «Variante no disponible» sin cambiar a otra en silencio.
 - **CAT-CA-024 (CAT-RF-006):** Cuando un atributo numérico se use en filtros u
   orden, el sistema deberá guardar valor y unidad normalizados. Un valor ausente
   deberá distinguirse de cero, «No corresponde» y «Pendiente de verificar»; solo
   los valores conocidos participarán en filtros y órdenes.
+- **CAT-CA-047 (CAT-RF-006):** Cuando se guarde o publique un valor técnico, el
+  sistema deberá validarlo contra la definición de su categoría: tipo, unidad,
+  cardinalidad y valores admitidos de `category-data.md`. Rechazará valores
+  incompatibles con un error asociado al campo y no convertirá una ausencia en
+  cero ni en un valor de otra unidad.
 - **CAT-CA-025 (CAT-RF-010, CAT-RF-011):** Cuando un Editor envíe una ficha nueva
   o una corrección publicada a revisión, el contenido público deberá permanecer
   en su versión anterior o no publicado hasta que un Revisor de catálogo la
@@ -271,14 +299,16 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
 - **CAT-CA-027 (CAT-RF-007):** Cuando exista precio, el sistema deberá mostrarlo
   como «Precio aproximado» en USD, con valor positivo de hasta dos decimales y
   formato español. Si falta, mostrará «No disponible»; no lo tratará como cero,
-  no coincidirá con filtros de precio y quedará al final al ordenar por precio.
+  no coincidirá con filtros de precio y quedará al final al ordenar por precio,
+  tanto ascendente como descendente.
   Solo mostrará el precio de la revisión pública vigente; no expondrá historial
   de precios ni afirmará que el importe siga vigente. Fuentes y método editorial
   serán los elegidos por el equipo al cargarlo.
 - **CAT-CA-028 (CAT-RF-008):** Cuando exista fecha de lanzamiento, el sistema
   deberá conservar su precisión original (año, mes o día) y mostrar solo esa
   precisión. Si se filtra por año, una fecha parcial coincidirá por su año
-  conocido; sin fecha, no coincidirá y quedará al final al ordenar.
+  conocido; al ordenar descendentemente, usará la clave (año, mes conocido o 0,
+  día conocido o 0). Una fecha ausente no coincidirá con el filtro y quedará al final.
 - **CAT-CA-029 (CAT-RF-009):** Cuando se publique un pro o contra, deberá estar
   redactado en español, contextualizado como valoración editorial y respaldado
   por material de revisión fiable. Los hechos técnicos se basarán preferentemente
@@ -304,12 +334,20 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
   determinará su valor vigente. No se aceptarán votos sobre fichas retiradas.
 - **CAT-CA-031 (CAT-RF-012, CAT-RF-013):** Cuando una visita sin cuenta participe,
   el sistema deberá usar un token aleatorio de primera parte en una cookie
-  `Secure`, `HttpOnly` y `SameSite=Lax`, con vigencia de 12 meses, sin usar la IP
+  `Secure`, `HttpOnly` y `SameSite=Lax`, con vigencia de 365 días (12 meses), sin usar la IP
   como identidad ni crear huella digital. La persona recibirá información visible
   sobre la cookie antes de participar.
   La interfaz deberá mostrar «Anónimo». Si se borra la cookie o cambia de
   navegador, podrá generarse otra identidad; el sistema no afirmará que deduplica
   personas reales y no fusionará aportes anónimos al iniciar sesión o registrarse.
+  Al vencer los 365 días definidos en CAT-CA-046, la credencial dejará de permitir participación y se
+  eliminará el hash de la credencial; el sistema conservará solo la identidad
+  interna sin credencial si es necesaria para mantener sus aportes existentes.
+- **CAT-CA-044 (CAT-RF-012, CAT-RF-013):** Cuando se cree un voto o comentario,
+  deberá asociarse exactamente a un usuario registrado o a un actor anónimo, nunca
+  a ambos ni a ninguno. Para conservar un comentario aprobado tras borrar la
+  cuenta, el sistema eliminará su autoría y ambas referencias; lo presentará como
+  «Anónimo». Esta es la única excepción de autoría sin actor vigente.
 - **CAT-CA-032 (CAT-RF-013):** Si el texto de un comentario, después de recortar
   espacios, tiene menos de 1 o más de 2.000 caracteres, el sistema deberá
   rechazarlo sin guardarlo y mostrar un error asociado al formulario.
@@ -325,10 +363,22 @@ con la baseline; su origen delegado queda conservado en el registro de decisione
   recuperar acceso por enlace. El correo nunca se mostrará en contenido público.
   El registro seguirá siendo opcional para votar y comentar.
 - **CAT-CA-035 (CAT-RF-014):** Cuando una persona elimine su cuenta, el sistema
-  deberá eliminar sus votos y comentarios pendientes, y conservar los comentarios
-  aprobados solo bajo el nombre «Anónimo». Los aportes enviados antes sin cuenta
-  no se vincularán automáticamente a la nueva cuenta. La política final de
-  retención y privacidad requiere revisión para los mercados de lanzamiento.
+  deberá invalidar sus sesiones; eliminar sus votos y sus comentarios no públicos;
+  y conservar los aprobados sin autoría ni referencia a la cuenta, visibles como
+  «Anónimo». La acción quedará auditada sin conservar correo o alias en el registro.
+  Los aportes enviados antes sin cuenta no se vincularán a la cuenta. La política
+  final de retención y privacidad requiere revisión por mercado (PND-020).
+- **CAT-CA-045 (CAT-RF-014):** Después de eliminar una cuenta, ninguna de sus
+  sesiones o credenciales permitirá acceder ni participar; un nuevo registro con
+  el mismo correo será una cuenta nueva y no recuperará votos o comentarios
+  anteriores. Los comentarios aprobados conservados no permitirán reconstruir el
+  correo o alias de la cuenta eliminada.
+- **CAT-CA-046 (CAT-RF-012, CAT-RF-013):** Al crear la identidad anónima, el
+  sistema fijará su vencimiento exactamente 365 días después de su emisión
+  (12 meses de vigencia). En el instante de vencimiento o después, el token dejará
+  de autenticar votos o comentarios y su hash se eliminará. Los aportes existentes
+  conservarán sus conteos y comentarios públicos bajo «Anónimo», sin asociarse a
+  un nuevo token o cuenta.
 
 ### Apariencia y calidad de servicio
 
@@ -416,7 +466,7 @@ no quedan como una agenda abierta de decisiones:
 - Completar los contratos de información y sus ejemplos.
 - Resolver los hallazgos bloqueantes de la revisión.
 - Obtener aprobación explícita de versión y alcance del responsable del producto
-  (**completado** para la versión 0.20; ver `docs/baseline.md`).
+  (**completado** para la versión 0.21; ver `docs/baseline.md`).
 
 ## Estado de verificación
 
@@ -432,3 +482,4 @@ Las tareas futuras están en `implementation-backlog.md` y siguen pendientes.
 | 0.18 | Incorpora contratos para búsqueda, filtros, catálogo editorial, cuentas, votos, comentarios y requisitos no funcionales a partir de ADE-001 a ADE-016. | CAT-RF-001 a CAT-RF-018; CAT-RNF-001 a CAT-RNF-004 | Defaults delegados; después adoptados en la baseline. |
 | 0.19 | Define campos mínimos de publicación por categoría y precisión exacta/retención de la ventana de popularidad. | CAT-CA-018, CAT-CA-026 | ADE-018/ADE-019; baseline aprobada 2026-10-26. |
 | 0.20 | Expresa como criterios la revisión anual ya adoptada en ADE-009 y los estados de interfaz de ADE-010. | CAT-RF-010, CAT-RF-019; CAT-CA-040/041 | Alineación con defaults ya adoptados; no cambia el alcance aprobado. |
+| 0.21 | Cierra hallazgos REV-SDD-001 a REV-SDD-009 sobre autoría, permisos, variantes, atributos, ciclo de cuenta anónima, orden y precisión de fechas. | CAT-CA-042 a CAT-CA-047 y criterios relacionados | Aprobación del responsable al solicitar implementar el plan de correcciones; consultar `docs/sdd-review.md`. |

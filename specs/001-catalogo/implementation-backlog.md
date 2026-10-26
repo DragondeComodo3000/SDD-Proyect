@@ -1,7 +1,7 @@
 # CAT — Backlog de implementación planificada
 
-Versión: 1.0. Estado: **planificado; ninguna tarea ejecutada**. Baseline: spec 0.20 y plan 0.3,
-aprobados el 2026-10-26. Este archivo define trabajo futuro y no contiene código.
+Versión: 1.1. Estado: **planificado; ninguna tarea ejecutada**. Baseline: spec 0.21 y plan 0.4,
+aprobados en la revisión correctiva registrada en `docs/baseline.md`. Este archivo define trabajo futuro y no contiene código.
 
 ## Reglas de ejecución
 
@@ -80,13 +80,13 @@ aprobados el 2026-10-26. Este archivo define trabajo futuro y no contiene códig
 - Verificación: CAT-CP-004, CAT-CP-005, CAT-CP-017.
 - Hecho cuando: categorías y marcas pueden administrarse sin agregar categorías al MVP fuera de decisión aprobada.
 
-### [CAT-T-008] Implementar definiciones y valores tipados de atributos
+### [CAT-T-008] Implementar definiciones de atributos por categoría
 
 - Estado: pendiente. Depende de: CAT-T-007. Tamaño: 30–60 min.
 - Requisitos/criterios: CAT-RF-003, CAT-RF-006; CAT-CA-005, 024.
-- Módulos/contratos: `AttributeDefinition`, `AttributeValue`, `category-data.md`.
+- Módulos/contratos: `AttributeDefinition`, `category-data.md`; los valores se crean con cada variante en CAT-T-010.
 - Verificación: CAT-CP-005, CAT-CP-024; cero real, unidades y estados de ausencia.
-- Hecho cuando: cada atributo tiene tipo, unidad y categoría; las ausencias no se interpretan como cero.
+- Hecho cuando: cada atributo tiene clave estable, tipo, unidad, cardinalidad, filtro y validaciones documentados; las ausencias no se interpretan como cero.
 
 ### [CAT-T-009] Crear productos y revisiones editoriales
 
@@ -286,53 +286,63 @@ aprobados el 2026-10-26. Este archivo define trabajo futuro y no contiene códig
 - Verificación: CAT-CP-036; revisión manual y auditoría WCAG 2.2 AA.
 - Hecho cuando: controles operables con teclado, foco/errores visibles y sin scroll horizontal de página a 360 CSS px; hallazgos bloqueantes resueltos.
 
-### [CAT-T-033] Instrumentar y medir rendimiento de campo
+### [CAT-T-033] Instrumentar medición de rendimiento de campo
 
 - Estado: pendiente. Depende de: CAT-T-001, CAT-T-016, CAT-T-019 a CAT-T-024.
 - Requisitos/criterios: CAT-RNF-003; CAT-CA-038.
 - Módulos/contratos: instrumentación respetuosa de privacidad y tablero/procedimiento tras elegir hosting.
 - Verificación: CAT-CP-037.
-- Hecho cuando: se registran LCP/INP/CLS p75 por dispositivo durante ventana de 28 días; si falta tráfico el resultado dice «no medible».
+- Hecho cuando: la instrumentación respeta privacidad y registra LCP/INP/CLS con etiquetas de dispositivo necesarias para el p75; no declara cumplimiento de campo antes de contar con una ventana completa de 28 días.
 
 ### [CAT-T-034] Completar validación de flujos y trazabilidad de ejecución
 
 - Estado: pendiente. Depende de: CAT-T-001 a CAT-T-033.
-- Requisitos/criterios: todos los CAT-RF y CAT-RNF.
+- Requisitos/criterios: todos los CAT-RF y CAT-RNF; CAT-CA-038 se verifica aquí como contrato e instrumentación, no como resultado de campo.
 - Módulos/contratos: suite Django, `tests/integration/`, `tests/flows/`, `traceability.md`.
-- Verificación: CAT-CP-001 a CAT-CP-040 y CAT-CA-001 a CAT-CA-041.
-- Hecho cuando: cada criterio tiene prueba implementada y resultado real; fallos e inmedibles quedan identificados, sin declarar éxito por cobertura parcial.
+- Verificación: CAT-CP-001 a CAT-CP-046 y CAT-CA-001 a CAT-CA-047.
+- Hecho cuando: cada criterio tiene prueba implementada y resultado real; fallos y mediciones de campo todavía no disponibles quedan identificados. No se declara cumplimiento total de CAT-RNF-003 hasta completar CAT-T-038.
 
 ## Fase F — Gates operativos previos a producción
 
 ### [CAT-T-035] Definir proveedor, respaldos y recuperación
 
-- Estado: pendiente, bloqueada hasta resolver PND-012. No bloquea el desarrollo local.
-- Depende de: selección de presupuesto, hosting, región y responsables.
+- Estado: pendiente antes de desplegar; no bloquea el desarrollo local.
+- Precondiciones: responsables disponibles y autorización para evaluar opciones; el presupuesto y proveedor son resultados de esta tarea, no prerrequisitos.
 - Requisitos/criterios: decisiones operativas asociadas a CAT-RNF-003/004.
 - Verificación: restauración ensayada con datos ficticios y evidencia de RPO/RTO acordados.
 - Hecho cuando: proveedor y costos están aprobados, copias de datos/medios se restauran en ensayo y responsables están identificados.
 
 ### [CAT-T-036] Cerrar revisión legal y privacidad de los mercados elegidos
 
-- Estado: pendiente, bloqueada hasta resolver PND-020. Requisito para habilitar cuentas/comentarios públicamente.
-- Depende de: selección de jurisdicciones y revisión legal competente.
+- Estado: pendiente antes de habilitar cuentas/comentarios públicamente.
+- Precondiciones: responsable de producto selecciona los mercados objetivo y asigna revisión legal competente; la decisión formal queda como resultado.
 - Requisitos/criterios: CAT-RNF-004; CAT-CA-031, 033 a 035, 039.
 - Verificación: políticas de privacidad, cookies, términos, retención y derechos de imágenes revisados para los mercados seleccionados.
 - Hecho cuando: decisiones y evidencias de revisión están registradas antes de publicación pública.
 
 ### [CAT-T-037] Resolver marca y dominio antes de publicar
 
-- Estado: pendiente, bloqueada hasta resolver PND-021. No bloquea diseño ni desarrollo local.
-- Depende de: decisión de nombre y disponibilidad de activos/dominio.
+- Estado: pendiente antes de publicar; no bloquea diseño ni desarrollo local.
+- Precondiciones: responsable disponible para decidir nombre y revisar disponibilidad; confirmación de marca/dominio es resultado de la tarea.
 - Requisitos/criterios: ninguno funcional; gate de publicación.
 - Verificación: nombre, dominio y permisos de marca confirmados por el responsable.
 - Hecho cuando: los activos aprobados sustituyen el nombre interno «Catálogo» en la publicación.
+
+### [CAT-T-038] Medir cumplimiento de rendimiento de campo
+
+- Estado: pendiente después de disponer de despliegue, tráfico suficiente y una ventana completa de 28 días.
+- Depende de: CAT-T-033, CAT-T-034, CAT-T-035, CAT-T-036 y CAT-T-037.
+- Requisitos/criterios: CAT-RNF-003; CAT-CA-038.
+- Módulos/contratos: evidencia de métricas de campo, metodología y exclusiones documentadas en CAT-CP-037.
+- Verificación: recalcular LCP/INP/CLS p75 para la ventana y segmentos definidos por la spec; adjuntar fuente y período.
+- Hecho cuando: cada umbral queda registrado como cumplido o fallido con evidencia reproducible; si no existe tráfico suficiente o ventana válida, queda «no medible» y CAT-RNF-003 sigue sin aceptación.
 
 ## Orden y gates
 
 Las fases A–E constituyen el trabajo planificado para la versión inicial y requieren
 una instrucción explícita de implementación antes de ejecutarse. Las tareas
-CAT-T-035 a CAT-T-037 no se inician hasta resolver sus decisiones PND respectivas;
-no deben adelantarse ni bloquear desarrollo que no dependa de ellas. Tras completar
-las tareas funcionales se debe ejecutar la verificación de CAT-T-034 antes de
-declarar cumplimiento de la spec.
+CAT-T-035 a CAT-T-037 producen las decisiones/gates operativos PND-012, PND-020 y
+PND-021; no dependen de que esas decisiones ya estén cerradas. No bloquean el
+desarrollo local, pero sí sus operaciones de despliegue/publicación correspondientes.
+CAT-T-034 verifica criterios funcionales y contratos; CAT-T-038, posterior al
+despliegue y a 28 días de medición, es necesaria para aceptar el rendimiento de campo.
